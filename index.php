@@ -13,48 +13,49 @@
 </html>
 <?php
 if(isset($_POST['send'])){
-    // Parametri email
-    $destinatario = $_POST['email'];
-    $oggetto = 'Oggetto dell\'email';
-    $messaggio = 'Corpo dell\'email';
+    // Email parameters
+    $recipient = $_POST['email'];
+    $subject = 'Email Subject';
+    $message = 'Email Body';
 
-    $codiceMonitoraggio = uniqid();
+    $trackingCode = uniqid();
 
-    // URL dell'immagine di monitoraggio
-    $urlMonitoraggio = 'https://www.wosknet.com/SitoInnocuo/sus2/track.php?id=' . $codiceMonitoraggio;
+    // Tracking image URL
+    $trackingImageUrl = 'https://www.example.com/InnocuousSite/sus2/track.php?id=' . $trackingCode;
 
-    // Codice HTML dell'immagine di monitoraggio
-    $immagineMonitoraggio = '<img src="' . $urlMonitoraggio . '" alt="" />';
+    // Tracking image HTML code
+    $trackingImage = '<img src="' . $trackingImageUrl . '" alt="" />';
 
-    // Aggiungi l'immagine di monitoraggio al corpo dell'email
-    $messaggio .= $immagineMonitoraggio;
+    // Add tracking image to email body
+    $message .= $trackingImage;
 
-    // Intestazioni dell'email
+    // Email headers
     $headers = "From: noreply@gmail.com\r\n";
     $headers .= "Reply-To: noreply@gmail.com\r\n";
     $headers .= "Cc: noreply@gmail.com\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=utf-8\r\n";
 
-    // Salva il codice di monitoraggio e la mail su ore.txt
-    salvaCodiceEmail($codiceMonitoraggio, $destinatario);
+    // Save tracking code and email to ore.txt
+    saveTrackingCodeEmail($trackingCode, $recipient);
 
-    // Invia l'email
-    if (mail($destinatario, $oggetto, $messaggio, $headers)) {
-        echo 'Email inviata con successo a '.$destinatario;
+    // Send the email
+    if (mail($recipient, $subject, $message, $headers)) {
+        echo 'Email sent successfully to '.$recipient;
     } else {
-        echo 'Si è verificato un errore durante l\'invio dell\'email.';
+        echo 'An error occurred while sending the email.';
     }
 }
 
-function salvaCodiceEmail($codiceMonitoraggio, $email) {
-    // Percorso del file di testo per il salvataggio del codice di monitoraggio e dell'email
-    $percorsoFile = 'ore.txt';
+function saveTrackingCodeEmail($trackingCode, $email) {
+    // File path for saving the tracking code and email
+    $filePath = 'ore.txt';
 
-    // Creazione della riga da salvare sul file
-    $riga = $codiceMonitoraggio . '|' . $email . PHP_EOL;
+    // Create the line to be saved in the file
+    $line = $trackingCode . '|' . $email . PHP_EOL;
 
-    // Aggiunta della riga al file di testo
-    file_put_contents($percorsoFile, $riga, FILE_APPEND);
+    // Append the line to the text file
+    file_put_contents($filePath, $line, FILE_APPEND);
 }
 ?>
+
